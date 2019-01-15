@@ -2,5 +2,7 @@ dotnet publish src/Yozian.EFCorePlus/Yozian.EFCorePlus.csproj \
     --force \
     -c Release \
     -o "../../nuget/lib/netstandard2.0"
-    
-rm nuget/lib/netstandard2.0/Yozian.EFCorePlus.deps.json
+
+cd nuget/lib/netstandard2.0/
+find . -type f ! -name "Yozian.*.dll" -exec rm -rf {} \;
+cd -
