@@ -9,15 +9,11 @@
     <projectUrl>https://github.com/yozian/Yozian.EFCorePlus</projectUrl>
     <iconUrl>https://no_icon_url_here</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description></description>
+    <description>partial updated and scheam description scripts generation</description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright Ⓒ yozian 2019</copyright>
-    <tags>entityFramework schema description generation</tags>
+    <tags>entityFrameworkcore, partial columns update, schema description generation</tags>
     <dependencies>
-      <group targetFramework="netcoreapp2.0"></group>
-      <group targetFramework="netcoreapp2.1"></group>
-      <group targetFramework="netcoreapp2.2"></group>
-      <dependency id="Yozian.Extension" version="[1.*,2.0.1)" />
       <dependency id="Yozian.Extension" version="[1.*,2.0.1)" />
       <dependency id="Microsoft.EntityFrameworkCore" version="[2.1.0,2.2.1)" />
     </dependencies>
