@@ -15,7 +15,7 @@
     <tags>entityFrameworkcore, partial columns update, schema description generation</tags>
     <dependencies>
       <dependency id="Yozian.Extension" version="[1.*,2.0.1)" />
-      <dependency id="Microsoft.EntityFrameworkCore" version="[2.1.0,2.2.1)" />
+      <dependency id="Microsoft.EntityFrameworkCore" version="[2.1.0,2.2.1]" />
     </dependencies>
     <repository type="git" commit="" url="https://github.com/yozian/Yozian.EFCorePlus"></repository>
   </metadata>
