@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Yozian.EFCorePlus.Constants;
 using Yozian.EFCorePlus.ShemaDescription.Attributes;
@@ -41,39 +42,32 @@ namespace Yozian.EFCorePlus.ShemaDescription
                 .Select(entity =>
                 {
                     // Get Table Name
-                    var tableNameAttr = Attribute.GetCustomAttribute(entity.ClrType, typeof(TableAttribute)) as TableAttribute;
-                    var tableName = tableNameAttr?.Name ?? entity.ClrType.Name;
+                    var tableName = entity.Relational().TableName;
 
                     // table description
-
                     var tableDescriptAttr = getDescriptionAttr(entity.ClrType);
 
                     //var tableDescriptAttr = Attribute.GetCustomAttribute(entity.ClrType, typeof(SchemaDescription)) as SchemaDescription;
                     var tableDescription = tableDescriptAttr?.Description ?? "";
 
-                    var columnList = entity
-                        .ClrType
-                        .GetProperties()
-                        .Where(p => Attribute.GetCustomAttribute(p, typeof(NotMappedAttribute)) == null) // Filtering out NotMap properties
-                        .Where(p => getDescriptionAttr(p.DeclaringType) != null) // Filtering only accept have description
-                        .Select(property =>
-                        {
-                            // Get column name
-                            var columnNameAttr = Attribute.GetCustomAttribute(property, typeof(ColumnAttribute)) as ColumnAttribute;
-                            var columnName = columnNameAttr?.Name ?? property.Name;
+                    var columnList = entity.GetProperties()
+                      .Select(property =>
+                      {
+                          var columnName = property.Relational().ColumnName;
 
-                            // Get Description
-                            var columnDescriptionAttr = getDescriptionAttr(property);
+                          // Get Description
+                          var columnDescriptionAttr = getDescriptionAttr(property.PropertyInfo);
 
-                            var description = columnDescriptionAttr?.Description ?? string.Empty;
+                          var description = columnDescriptionAttr?.Description ?? string.Empty;
 
-                            return new ColumnSchema
-                            {
-                                Name = columnName,
-                                Description = description
-                            };
-                        })
-                        .ToList();
+                          return new ColumnSchema
+                          {
+                              Name = columnName,
+                              Description = description
+                          };
+
+                      })
+                      .ToList();
 
                     return new TableSchema()
                     {
@@ -124,7 +118,7 @@ namespace Yozian.EFCorePlus.ShemaDescription
         private static IDescriptionAttribute getDescriptionAttr(Type type)
         {
             return Attribute.GetCustomAttributes(type)
-                     .Where(attr => attr.GetType().IsAssignableFrom(typeof(IDescriptionAttribute)))
+                     .Where(attr => typeof(IDescriptionAttribute).IsAssignableFrom(attr.GetType()))
                      .FirstOrDefault() as IDescriptionAttribute;
         }
 
@@ -132,7 +126,7 @@ namespace Yozian.EFCorePlus.ShemaDescription
         private static IDescriptionAttribute getDescriptionAttr(MemberInfo mi)
         {
             return Attribute.GetCustomAttributes(mi)
-                      .Where(attr => attr.GetType().IsAssignableFrom(typeof(IDescriptionAttribute)))
+                      .Where(attr => typeof(IDescriptionAttribute).IsAssignableFrom(attr.GetType()))
                       .FirstOrDefault() as IDescriptionAttribute;
         }
 

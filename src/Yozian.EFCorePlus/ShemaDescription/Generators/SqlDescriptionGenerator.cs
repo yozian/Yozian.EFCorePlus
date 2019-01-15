@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Yozian.EFCorePlus.ShemaDescription.Models;
 using Yozian.Extension;
@@ -10,16 +11,17 @@ namespace Yozian.EFCorePlus.ShemaDescription.Generators
     {
         public string GenerateInserOrUpdateScript(TableSchema tableSchema)
         {
-
             var sb = new StringBuilder();
 
-            var arguments = $@"
-                            -- Table ${tableSchema.Name}
+            sb.AppendLine($"-- Table {tableSchema.Name}");
+            if (!string.IsNullOrEmpty(tableSchema.Description))
+            {
+                var arguments = $@"
                             @name=N'MS_Description', @value=N'{tableSchema.Description}' ,
                             @level0type=N'SCHEMA',@level0name=N'dbo',
                             @level1type=N'TABLE',@level1name=N'{tableSchema.Name}'";
 
-            var cmd = $@"IF NOT EXISTS(SELECT * FROM ::fn_listextendedproperty (NULL, N'schema', N'dbo', N'table', '{tableSchema.Name}', NULL, NULL))
+                var cmd = $@"IF NOT EXISTS(SELECT * FROM ::fn_listextendedproperty (NULL, N'schema', N'dbo', N'table', '{tableSchema.Name}', NULL, NULL))
                                 BEGIN
                                     exec sp_addextendedproperty  {arguments.Replace("N'Schema'", "N'User'")};
                                 END
@@ -29,9 +31,13 @@ namespace Yozian.EFCorePlus.ShemaDescription.Generators
                                 END";
 
 
-            sb.AppendLine(cmd);
+                sb.AppendLine(cmd);
+            }
 
-            tableSchema.Columns
+            tableSchema
+                .Columns
+                // skip for empty description
+                .Where(cs => !string.IsNullOrEmpty(cs.Description))
                 .ForEach(column =>
                 {
 
