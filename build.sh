@@ -1,8 +1,9 @@
-dotnet publish src/Yozian.EFCorePlus/Yozian.EFCorePlus.csproj \
+projectName='Yozian.EFCorePlus'
+
+dotnet publish src/$projectName/$projectName.csproj \
     --force \
     -c Release \
-    -o "../../nuget/lib/netstandard2.0"
+    -o "bin/publish"
 
-cd nuget/lib/netstandard2.0/
-find . -type f ! -name "Yozian.*.dll" -exec rm -rf {} \;
-cd -
+cp src/$projectName/bin/publish/$projectName.dll nuget/lib/netstandard2.0/
+cp src/$projectName/bin/publish/$projectName.pdb nuget/lib/netstandard2.0/
