@@ -4,7 +4,7 @@
 * Provide schema description & extension method to generate update scheam desciription sql scripts
 
 
-# Partial field update example
+# Partial fields update example
 
 
 ```csharp
@@ -24,6 +24,22 @@
 
     // when the SaveChanges called, only the [Name] column will be updated.
     dbContext.SaveChanges();
+
+```
+
+# Add Consoloe logger for command executed by EF core
+
+```csharp
+
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+
+		// add logger here
+        optionsBuilder.EnableSensitiveDataLogging();
+        optionsBuilder.AddExecutedCommandConsoleLogger();
+
+    }
 
 ```
 
