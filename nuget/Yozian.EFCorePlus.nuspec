@@ -9,7 +9,7 @@
     <projectUrl>https://github.com/yozian/Yozian.EFCorePlus</projectUrl>
     <iconUrl>https://no_icon_url_here</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>partial updated and scheam description scripts generation</description>
+    <description>Partial updated and scheam description scripts generation</description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright Ⓒ yozian 2019</copyright>
     <tags>entityFrameworkcore, partial columns update, schema description generation</tags>
